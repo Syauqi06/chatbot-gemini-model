@@ -2,26 +2,124 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IEL — Asisten IELTS</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f8fc" />
+  <title>Asisten Kosakata IELTS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="container">
-    <header class="chat-header">
-      <div class="brand-mark" aria-hidden="true">IEL</div>
-      <div class="header-copy">
-        <h1>Asisten IELTS</h1>
-        <p class="subtitle">Teman latihan dan persiapan IELTS Anda</p>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation" data-i18n-aria="mainNavigation">
+      <a class="brand" href="#" aria-label="IELTS Vocabulary Assistant home" data-i18n-aria="brandHome">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        <span class="brand-copy"><strong>Lexora</strong><small data-i18n="brandSubtitle">IELTS Vocabulary</small></span>
+      </a>
+
+      <button class="new-chat-button" id="new-chat" type="button"><span aria-hidden="true">+</span> <span data-i18n="newChat">New chat</span></button>
+      <p class="nav-label" data-i18n="yourSpace">YOUR SPACE</p>
+      <nav class="main-nav">
+        <button class="nav-button active" type="button" data-panel="history"><span class="nav-icon" aria-hidden="true">◷</span> <span data-i18n="history">Conversation history</span></button>
+        <button class="nav-button" type="button" data-panel="vocabulary"><span class="nav-icon" aria-hidden="true">▤</span> <span data-i18n="vocabularyBook">Vocabulary book</span></button>
+        <button class="nav-button" type="button" data-panel="progress"><span class="nav-icon" aria-hidden="true">↗</span> <span data-i18n="progress">My progress</span></button>
+      </nav>
+
+      <div class="sidebar-section history-section">
+        <div class="section-heading"><span data-i18n="recentChats">RECENT CHATS</span></div>
+        <div id="conversation-list" class="conversation-list"></div>
       </div>
-      <span class="online-status">Siap membantu</span>
-    </header>
-    <div id="chat-box" class="chat-box" aria-live="polite" aria-label="Percakapan"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Tulis pesan Anda..." autocomplete="off" aria-label="Pesan Anda" required />
-      <button type="submit">Kirim</button>
-    </form>
-  </main>
+
+      <div class="sidebar-bottom">
+        <div class="level-card">
+          <div class="level-card-heading"><span data-i18n="learningLevel">LEARNING LEVEL</span><span class="level-spark" aria-hidden="true">✦</span></div>
+          <div class="level-picker sidebar-level-picker" id="sidebar-level-picker">
+            <button class="level-trigger sidebar-level-trigger" id="sidebar-level-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="sidebar-level-options" data-i18n-aria="chooseLevel">
+              <span class="level-code" id="sidebar-level-code">A1</span>
+              <span class="level-trigger-copy"><strong id="sidebar-level-name">Pemula</strong><small id="sidebar-level-detail">Kata sehari-hari dan frasa sederhana</small></span>
+              <span class="level-chevron" aria-hidden="true">⌄</span>
+            </button>
+            <div class="level-options sidebar-level-options" id="sidebar-level-options" role="listbox" aria-label="Pilih level CEFR Anda" data-i18n-aria="chooseLevel" hidden></div>
+          </div>
+          <p data-i18n="levelHint">Answers and practice adapt to your level.</p>
+        </div>
+        <button class="profile-button" type="button" data-panel="progress">
+          <span class="avatar">S</span><span class="profile-copy"><strong data-i18n="myProfile">My learning profile</strong><small data-i18n="profileSubtitle">Personal vocabulary journey</small></span><span class="profile-more" aria-hidden="true">···</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="mobile-menu" type="button" aria-label="Open menu" data-i18n-aria="openMenu"><span aria-hidden="true">☰</span></button>
+        <div class="assistant-identity">
+          <span class="assistant-avatar" aria-hidden="true"><span>L</span><i></i></span>
+          <div><h1 data-i18n="appName">IELTS Vocabulary Assistant</h1><p data-i18n="appSubtitle">Your personal IELTS vocabulary tutor</p></div>
+        </div>
+        <div class="topbar-actions">
+          <span class="ready-status"><i></i> <span data-i18n="ready">Ready to help</span></span>
+          <div class="level-picker header-level-picker" id="header-level-picker">
+            <button class="level-trigger header-level-trigger" id="header-level-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="header-level-options" data-i18n-aria="activeLevel">
+              <span class="level-code" id="header-level-code">A1</span><span class="header-level-name" id="header-level-name">Pemula</span><span class="level-chevron" aria-hidden="true">⌄</span>
+            </button>
+            <div class="level-options header-level-options" id="header-level-options" role="listbox" aria-label="Level CEFR aktif" data-i18n-aria="activeLevel" hidden></div>
+          </div>
+          <label class="sr-only" for="language-select" data-i18n="interfaceLanguage">Interface language</label>
+          <select id="language-select" class="header-level language-select" aria-label="Interface language" data-i18n-aria="interfaceLanguage">
+            <option value="id">ID</option><option value="en">EN</option>
+          </select>
+          <button class="icon-button desktop-new-chat" id="header-new-chat" type="button" aria-label="Start a new chat" title="New chat" data-i18n-aria="startNewChat" data-i18n-title="newChat">＋</button>
+        </div>
+      </header>
+
+      <section class="conversation" aria-label="Chat conversation" data-i18n-aria="chatConversation">
+        <div class="chat-box" id="chat-box" aria-live="polite" aria-label="Messages" data-i18n-aria="messages">
+          <section class="welcome-screen" id="welcome-screen">
+            <div class="welcome-orb" aria-hidden="true"><span>✦</span><i></i><b></b></div>
+            <p class="eyebrow" data-i18n="welcomeEyebrow">YOUR PERSONAL LEARNING COMPANION</p>
+            <h2><span class="welcome-title-line" data-i18n="welcomeTitleOne">Small steps.</span><br /><span class="welcome-title-line accent" data-i18n="welcomeTitleTwo">Stronger vocabulary.</span></h2>
+            <p class="welcome-description" data-i18n="welcomeDescription">Build the words and confidence you need for IELTS. Ask me anything, or choose a place to start.</p>
+            <div class="suggestion-grid">
+              <button class="suggestion-card" type="button" data-prompt-en="Teach me 5 new vocabulary words for my current level. Include meaning, pronunciation, part of speech, and examples." data-prompt-id="Ajari saya 5 kosakata baru sesuai level saya. Sertakan arti, pelafalan, kelas kata, dan contoh kalimat.">
+                <span class="suggestion-icon purple" aria-hidden="true">✧</span><span><strong data-i18n="promptLearnTitle">Learn new words</strong><small data-i18n="promptLearnSubtitle">Discover vocabulary at your level</small></span><span class="suggestion-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button class="suggestion-card" type="button" data-prompt-en="Let's practice translating Indonesian vocabulary into English at my current CEFR level. Give me one question at a time." data-prompt-id="Ayo berlatih menerjemahkan kosakata bahasa Indonesia ke bahasa Inggris sesuai level CEFR saya. Berikan satu soal setiap kali.">
+                <span class="suggestion-icon blue" aria-hidden="true">⇄</span><span><strong data-i18n="promptPracticeTitle">Practice translation</strong><small data-i18n="promptPracticeSubtitle">Turn what you know into English</small></span><span class="suggestion-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button class="suggestion-card" type="button" data-prompt-en="Test my English vocabulary at my current CEFR level. Ask me one question at a time, accept correct alternatives, and keep score." data-prompt-id="Uji kosakata bahasa Inggris saya pada level CEFR saat ini. Berikan satu soal setiap kali, terima jawaban alternatif yang benar, dan catat skornya.">
+                <span class="suggestion-icon peach" aria-hidden="true">◎</span><span><strong data-i18n="promptTestTitle">Check your level</strong><small data-i18n="promptTestSubtitle">Try a friendly vocabulary quiz</small></span><span class="suggestion-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button class="suggestion-card" type="button" data-prompt-en="Teach me useful IELTS academic vocabulary for Writing Task 2 at my current level, including collocations and natural examples." data-prompt-id="Ajari saya kosakata akademik IELTS yang berguna untuk Writing Task 2 sesuai level saya, termasuk kolokasi dan contoh yang alami.">
+                <span class="suggestion-icon green" aria-hidden="true">▤</span><span><strong data-i18n="promptIeltsTitle">IELTS vocabulary</strong><small data-i18n="promptIeltsSubtitle">Words for writing and speaking</small></span><span class="suggestion-arrow" aria-hidden="true">↗</span>
+              </button>
+            </div>
+            <p class="privacy-note"><span aria-hidden="true">✧</span> <span data-i18n="welcomeFooter">Learn at your own pace. Every conversation is a fresh opportunity.</span></p>
+          </section>
+        </div>
+      </section>
+
+      <footer class="composer-area">
+        <form id="chat-form" class="composer">
+          <label class="sr-only" for="user-input" data-i18n="yourMessage">Your message</label>
+          <textarea id="user-input" rows="1" placeholder="Ask anything about English vocabulary..." data-i18n-placeholder="chatPlaceholder" autocomplete="off" required></textarea>
+          <div class="composer-tools">
+            <span class="composer-hint"><kbd>Enter</kbd> <span data-i18n="toSend">to send</span> <span>·</span> <kbd>Shift + Enter</kbd> <span data-i18n="newLine">for a new line</span></span>
+            <button type="submit" class="send-button" id="send-button" aria-label="Send message" data-i18n-aria="sendMessage"><span data-i18n="send">Send</span><span class="send-arrow" aria-hidden="true">↑</span></button>
+          </div>
+        </form>
+        <p class="disclaimer" data-i18n="disclaimer">Lexora can make mistakes. Check important information and keep practicing.</p>
+      </footer>
+    </main>
+  </div>
+
+  <div class="overlay" id="panel-overlay" hidden>
+    <section class="side-panel" role="dialog" aria-modal="true" aria-labelledby="panel-title">
+      <header class="panel-header"><div><p class="eyebrow" id="panel-eyebrow">YOUR LEARNING SPACE</p><h2 id="panel-title">Vocabulary book</h2></div><button class="icon-button" id="close-panel" type="button" aria-label="Close panel" data-i18n-aria="closePanel">×</button></header>
+      <div id="panel-content" class="panel-content"></div>
+    </section>
+  </div>
+  <div class="sidebar-scrim" id="sidebar-scrim"></div>
   <script src="script.js"></script>
 </body>
 </html>
